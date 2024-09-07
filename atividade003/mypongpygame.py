@@ -100,8 +100,6 @@ while game_loop:
             if player_1_y < ball_y + 25:
                 if player_1_y + 150 > ball_y:
                     ball_dx *= -1
-                    offset = (ball_y + 25 / 2) - (player_1_y + player_1_height / 2)
-                    ball_dy = 5 * offset / (player_1_height / 2)
                     bounce_sound_effect.play()
 
         # ball collision with the player 2 's paddle
@@ -109,7 +107,6 @@ while game_loop:
             if player_2_y < ball_y + 25:
                 if player_2_y + 150 > ball_y:
                     ball_dx *= -1
-                    offset = (ball_y + 25 / 2) - (player_2_y + player_2_height / 2)
                     bounce_sound_effect.play()
 
         # scoring points
