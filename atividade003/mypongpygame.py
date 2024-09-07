@@ -3,7 +3,6 @@
 # 2024
 
 import pygame
-import random
 
 pygame.init()
 
@@ -11,7 +10,6 @@ COLOR_BLACK = (0, 0, 0)
 COLOR_WHITE = (255, 255, 255)
 
 INITIAL_Y_POSITION = 300
-BALL_TRACKING_PROBABILITY = 0.4
 
 SCORE_MAX = 2
 
@@ -138,9 +136,6 @@ while game_loop:
         else:
             player_1_y += 0
 
-        #player1 'auto-play'
-        player_1_y = ball_y
-
         # player 1 collides with upper wall
         if player_1_y <= 0:
             player_1_y = 0
@@ -150,10 +145,7 @@ while game_loop:
             player_1_y = 570
 
         # player 2 "Artificial Intelligence"
-        if random.random() <= BALL_TRACKING_PROBABILITY:
-            player_2_y = ball_y
-        else:
-            player_2_y = ball_y - (random.randint(1,10))
+        player_2_y = ball_y
         if player_2_y <= 0:
             player_2_y = 0
         elif player_2_y >= 570:
