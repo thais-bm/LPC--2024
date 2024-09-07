@@ -35,12 +35,16 @@ bounce_sound_effect = pygame.mixer.Sound('assets/bounce.wav')
 scoring_sound_effect = pygame.mixer.Sound('assets/258020__kodack__arcade-bleep-sound.wav')
 
 # player 1
+player_1_width = 20
+player_1_height = 150
 player_1 = pygame.image.load("assets/player.png")
 player_1_y = INITIAL_Y_POSITION
 player_1_move_up = False
 player_1_move_down = False
 
 # player 2 - robot
+player_2_width = 20
+player_2_height = 150
 player_2 = pygame.image.load("assets/player.png")
 player_2_y = INITIAL_Y_POSITION
 
@@ -96,6 +100,8 @@ while game_loop:
             if player_1_y < ball_y + 25:
                 if player_1_y + 150 > ball_y:
                     ball_dx *= -1
+                    offset = (ball_y + 25 / 2) - (player_1_y + player_1_height / 2)
+                    ball_dy = 5 * offset / (player_1_height / 2)
                     bounce_sound_effect.play()
 
         # ball collision with the player 2 's paddle
@@ -103,6 +109,7 @@ while game_loop:
             if player_2_y < ball_y + 25:
                 if player_2_y + 150 > ball_y:
                     ball_dx *= -1
+                    offset = (ball_y + 25 / 2) - (player_2_y + player_2_height / 2)
                     bounce_sound_effect.play()
 
         # scoring points
@@ -146,10 +153,11 @@ while game_loop:
             player_1_y = 570
 
         # player 2 "Artificial Intelligence"
-        if ball_y > player_2_y+random.randint(10,30):
+        if ball_y > player_2_y+random.randint(5,20):
             player_2_y += 5
-        if ball_y < player_2_y-random.randint(10,30):
+        if ball_y < player_2_y-random.randint(5,20):
             player_2_y -= 5
+
         if player_2_y <= 0:
             player_2_y = 0
         elif player_2_y >= 570:
