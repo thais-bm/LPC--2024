@@ -148,10 +148,8 @@ while game_loop:
         # player 2 "Artificial Intelligence"
         if ball_y > player_2_y+random.randint(25,30):
             player_2_y += 5
-            # player_2_y += random.uniform(3.1,4.5)
         if ball_y < player_2_y-random.randint(25,30):
             player_2_y -= 5
-            # player_2_y -= random.uniform(4.0,5.0)
 
         if player_2_y <= 0:
             player_2_y = 0
