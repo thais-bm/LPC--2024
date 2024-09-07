@@ -3,6 +3,7 @@
 # 2024
 
 import pygame
+import random
 
 pygame.init()
 
@@ -13,7 +14,7 @@ SCORE_MAX = 2
 
 size = (1280, 720)
 screen = pygame.display.set_mode(size)
-pygame.display.set_caption("MyPong - PyGame Edition - 2024-09-02")
+pygame.display.set_caption("MyPong - PyGame Edition - 2024-09-07")
 
 # score text
 score_font = pygame.font.Font('assets/PressStart2P.ttf', 44)
@@ -143,6 +144,7 @@ while game_loop:
             player_1_y = 570
 
         # player 2 "Artificial Intelligence"
+        # player_2_y = ball_y
         player_2_y = ball_y
         if player_2_y <= 0:
             player_2_y = 0
