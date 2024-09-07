@@ -1,5 +1,5 @@
 # Jucimar Jr
-# Thais
+# Thais Carolina - 2415310037
 # 2024
 
 import pygame
