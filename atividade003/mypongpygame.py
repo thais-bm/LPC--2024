@@ -84,7 +84,7 @@ while game_loop:
         screen.fill(COLOR_BLACK)
 
         # ball collision with the wall
-        if ball_y > 700:
+        if ball_y >= 700:
             ball_dy *= -1
             bounce_sound_effect.play()
         elif ball_y <= 0:
@@ -146,11 +146,10 @@ while game_loop:
             player_1_y = 570
 
         # player 2 "Artificial Intelligence"
-        if ball_y > player_2_y+random.randint(25,30):
+        if ball_y > player_2_y+random.randint(10,30):
             player_2_y += 5
-        if ball_y < player_2_y-random.randint(25,30):
+        if ball_y < player_2_y-random.randint(10,30):
             player_2_y -= 5
-
         if player_2_y <= 0:
             player_2_y = 0
         elif player_2_y >= 570:
