@@ -10,6 +10,9 @@ pygame.init()
 COLOR_BLACK = (0, 0, 0)
 COLOR_WHITE = (255, 255, 255)
 
+INITIAL_Y_POSITION = 300
+RANDOM_FACTOR = 10
+
 SCORE_MAX = 2
 
 size = (1280, 720)
@@ -34,13 +37,13 @@ scoring_sound_effect = pygame.mixer.Sound('assets/258020__kodack__arcade-bleep-s
 
 # player 1
 player_1 = pygame.image.load("assets/player.png")
-player_1_y = 300
+player_1_y = INITIAL_Y_POSITION
 player_1_move_up = False
 player_1_move_down = False
 
 # player 2 - robot
 player_2 = pygame.image.load("assets/player.png")
-player_2_y = 300
+player_2_y = INITIAL_Y_POSITION
 
 # ball
 ball = pygame.image.load("assets/ball.png")
@@ -145,7 +148,8 @@ while game_loop:
 
         # player 2 "Artificial Intelligence"
         # player_2_y = ball_y
-        player_2_y = ball_y
+        random_variable = random.randint(-RANDOM_FACTOR, RANDOM_FACTOR)
+        player_2_y = ball_y + random_variable
         if player_2_y <= 0:
             player_2_y = 0
         elif player_2_y >= 570:
