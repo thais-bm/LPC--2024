@@ -1,4 +1,5 @@
 # Jucimar Jr
+# Thais
 # 2024
 
 import pygame
