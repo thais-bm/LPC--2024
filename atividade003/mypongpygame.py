@@ -1,11 +1,9 @@
 # Jucimar Jr
 # Thais Carolina - 2415310037
 # 2024
-import math
-
 import pygame
 import random
-from math import sin, cos, radians
+import math
 
 pygame.init()
 
@@ -38,8 +36,6 @@ bounce_sound_effect = pygame.mixer.Sound('assets/bounce.wav')
 scoring_sound_effect = pygame.mixer.Sound('assets/258020__kodack__arcade-bleep-sound.wav')
 
 # player 1
-player_1_width = 20
-player_1_height = 150
 player_1 = pygame.image.load("assets/player.png")
 player_1_y = INITIAL_Y_POSITION
 PLAYER_1_X = 50
@@ -47,8 +43,6 @@ player_1_move_up = False
 player_1_move_down = False
 
 # player 2 - robot
-player_2_width = 20
-player_2_height = 150
 player_2 = pygame.image.load("assets/player.png")
 player_2_y = INITIAL_Y_POSITION
 PLAYER_2_X = 1180
@@ -59,8 +53,6 @@ ball_x = 640
 ball_y = 360
 ball_dx = 5
 ball_dy = 5
-ball_speed = math.sqrt(ball_dx**2 + ball_dy**2)
-MAX_ANGLE = 45
 
 # score
 score_1 = 0
@@ -102,24 +94,37 @@ while game_loop:
             ball_dy *= -1
             bounce_sound_effect.play()
 
-        # ball collision with the player 1 's paddle
-        if PLAYER_1_X <= ball_x <= PLAYER_1_X + 50: # X
-            if player_1_y <= ball_y <= player_1_y+150: # Y
+        # ball collision with Player 1's paddle
+        ball_speed = math.sqrt(ball_dx**2 + ball_dy**2)
+        if PLAYER_1_X <= ball_x <= PLAYER_1_X + 50:
+            if player_1_y <= ball_y <= player_1_y + 150:
                 if ball_dx < 0:
-                    # Its the difference between the ball_y pos and the middle of the paddle-y pos
-                    # Normalized: -1 to +1
-                    # Max angle: 45 degrees or pi/4
-                    pos_center_ball_y = (ball_y - (player_1_y+150)/2) / 75
-                    collide_angle = pos_center_ball_y * math.pi/4
-
-                    ball_dx *= -1
+                    # Paddle's Y center
+                    paddle_p1_center_y = player_1_y + 150 / 2
+                    # Distance between Paddle's Y center and ball-Y
+                    # Returns: value: -1 to 1
+                    collide_point = (ball_y - paddle_p1_center_y) / (150 / 2)
+                    # Max angle
+                    max_angle = math.pi/3
+                    collide_angle = collide_point * max_angle
+                    ball_dx = math.cos(collide_angle) * ball_speed  # Changes direction + horizontal speed
+                    ball_dy = math.sin(collide_angle) * ball_speed  # Changes direction + vertical speed
                     bounce_sound_effect.play()
 
-        # ball collision with the player 2 's paddle
+        # ball collision with Player 2's paddle
         if PLAYER_2_X <= ball_x <= PLAYER_2_X + 50:
-            if player_2_y <= ball_y <= player_2_y+150:
+            if player_2_y <= ball_y <= player_2_y + 150:
                 if ball_dx > 0:
-                    ball_dx *= -1
+                    # Paddle's Y center
+                    paddle_p2_center_y = player_2_y + 150 / 2
+                    collide_point = (ball_y - paddle_p2_center_y) / (150 / 2)
+                    max_angle = math.pi / 3
+                    # Distance between Paddle's Y center and ball-Y
+                    # Returns: value: -1 to 1
+                    collide_angle = collide_point * max_angle
+                    # Max angle
+                    ball_dx = -math.cos(collide_angle) * ball_speed  # Changes direction + horizontal speed
+                    ball_dy = math.sin(collide_angle) * ball_speed  # Changes direction + vertical speed
                     bounce_sound_effect.play()
 
         # scoring points
@@ -165,12 +170,10 @@ while game_loop:
             player_1_y = 570
 
         # player 2 "Artificial Intelligence"
-        """if ball_y > player_2_y+random.randint(25,30):
-            player_2_y += 5
-        if ball_y < player_2_y-random.randint(25,30):
-            player_2_y -= 5"""
-
-        player_2_y = ball_y
+        if ball_y > player_2_y + random.randint(10, 70):
+            player_2_y += 4
+        if ball_y < player_2_y + random.randint(10, 70):
+            player_2_y -= 4
 
         if player_2_y <= 0:
             player_2_y = 0
@@ -182,15 +185,12 @@ while game_loop:
 
         # debug info
         victory_font_2 = pygame.font.Font('assets/PressStart2P.ttf', 20)
-
-        ball2_text = victory_font_2.render(f'Ball X vel: {ball_dx:.2f} -- Ball Y vel: {ball_dy} --- Ball speed: {ball_speed}', True, COLOR_YELLOW, COLOR_BLACK)
+        ball2_text = victory_font_2.render(f'Ball X vel: {ball_dx:.2f} -- Ball Y vel: {ball_dy}', True, COLOR_YELLOW, COLOR_BLACK)
         ball2_text_rect = ball2_text.get_rect()
-        ball2_text_rect.topleft = (20, 600)
-
+        ball2_text_rect.topleft = (20, 560)
         ball_text = victory_font_2.render(f'Ball X: {ball_x:.2f} -- Ball Y: {ball_y}', True, COLOR_YELLOW, COLOR_BLACK)
         ball_text_rect = ball_text.get_rect()
         ball_text_rect.topleft = (20, 630)
-
         p1_text = victory_font_2.render(f'Player 1 X: {PLAYER_1_X} -- P1 y: {player_1_y}', True, COLOR_YELLOW,
                                         COLOR_BLACK)
         p1_text_rect = p1_text.get_rect()
@@ -220,4 +220,3 @@ while game_loop:
     game_clock.tick(60)
 
 pygame.quit()
-
