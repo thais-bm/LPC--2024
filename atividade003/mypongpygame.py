@@ -9,6 +9,7 @@ pygame.init()
 
 COLOR_BLACK = (0, 0, 0)
 COLOR_WHITE = (255, 255, 255)
+COLOR_YELLOW = (255, 215, 0)
 
 INITIAL_Y_POSITION = 300
 
@@ -26,7 +27,7 @@ score_text_rect.center = (680, 50)
 
 # victory text
 victory_font = pygame.font.Font('assets/PressStart2P.ttf', 100)
-victory_text = victory_font .render('VICTORY', True, COLOR_WHITE, COLOR_BLACK)
+victory_text = victory_font.render('VICTORY', True, COLOR_WHITE, COLOR_BLACK)
 victory_text_rect = score_text.get_rect()
 victory_text_rect.center = (450, 350)
 
@@ -39,6 +40,7 @@ player_1_width = 20
 player_1_height = 150
 player_1 = pygame.image.load("assets/player.png")
 player_1_y = INITIAL_Y_POSITION
+PLAYER_1_X = 50
 player_1_move_up = False
 player_1_move_down = False
 
@@ -47,6 +49,7 @@ player_2_width = 20
 player_2_height = 150
 player_2 = pygame.image.load("assets/player.png")
 player_2_y = INITIAL_Y_POSITION
+PLAYER_2_X = 1180
 
 # ball
 ball = pygame.image.load("assets/ball.png")
@@ -88,7 +91,7 @@ while game_loop:
         screen.fill(COLOR_BLACK)
 
         # ball collision with the wall
-        if ball_y >= 700:
+        if ball_y > 700:
             ball_dy *= -1
             bounce_sound_effect.play()
         elif ball_y <= 0:
@@ -96,28 +99,30 @@ while game_loop:
             bounce_sound_effect.play()
 
         # ball collision with the player 1 's paddle
-        if ball_x < 100:
-            if player_1_y < ball_y + 25:
-                if player_1_y + 150 > ball_y:
+        if PLAYER_1_X <= ball_x <= PLAYER_1_X + 50:
+            if player_1_y <= ball_y <= player_1_y+150:
+                if ball_dx < 0:
                     ball_dx *= -1
                     bounce_sound_effect.play()
 
         # ball collision with the player 2 's paddle
-        if ball_x > 1160:
-            if player_2_y < ball_y + 25:
-                if player_2_y + 150 > ball_y:
+        if PLAYER_2_X <= ball_x <= PLAYER_2_X+50:
+            if player_2_y <= ball_y <= player_1_y+150:
+                if ball_dx > 0:
                     ball_dx *= -1
                     bounce_sound_effect.play()
 
         # scoring points
-        if ball_x < -50:
+        # Making more sensible by using -30
+        # Making more sensible by using 1260
+        if ball_x < -30:
             ball_x = 640
             ball_y = 360
             ball_dy *= -1
             ball_dx *= -1
             score_2 += 1
             scoring_sound_effect.play()
-        elif ball_x > 1320:
+        elif ball_x > 1250:
             ball_x = 640
             ball_y = 360
             ball_dy *= -1
@@ -150,9 +155,9 @@ while game_loop:
             player_1_y = 570
 
         # player 2 "Artificial Intelligence"
-        if ball_y > player_2_y+random.randint(5,20):
+        if ball_y > player_2_y+random.randint(25,30):
             player_2_y += 5
-        if ball_y < player_2_y-random.randint(5,20):
+        if ball_y < player_2_y-random.randint(25,30):
             player_2_y -= 5
 
         if player_2_y <= 0:
@@ -163,11 +168,28 @@ while game_loop:
         # update score hud
         score_text = score_font.render(str(score_1) + ' x ' + str(score_2), True, COLOR_WHITE, COLOR_BLACK)
 
+        # debug info
+        victory_font_2 = pygame.font.Font('assets/PressStart2P.ttf', 10)
+        ball_text = victory_font_2.render(f'Ball X: {ball_x:.2f} -- Ball Y: {ball_y}', True, COLOR_YELLOW, COLOR_BLACK)
+        ball_text_rect = ball_text.get_rect()
+        ball_text_rect.topleft = (20, 620)
+        p1_text = victory_font_2.render(f'Player 1 X: {PLAYER_1_X} -- Player 1: {player_1_y}', True, COLOR_YELLOW,
+                                        COLOR_BLACK)
+        p1_text_rect = p1_text.get_rect()
+        p1_text_rect.topleft = (20, 630)
+        p2_text = victory_font_2.render(f'Player 2 X: {PLAYER_2_X} -- Player 2: {player_2_y}', True, COLOR_YELLOW,
+                                        COLOR_BLACK)
+        p2_text_rect = p2_text.get_rect()
+        p1_text_rect.topleft = (20, 640)
+
         # drawing objects
         screen.blit(ball, (ball_x, ball_y))
-        screen.blit(player_1, (50, player_1_y))
-        screen.blit(player_2, (1180, player_2_y))
+        screen.blit(player_1, (PLAYER_1_X, player_1_y))
+        screen.blit(player_2, (PLAYER_2_X, player_2_y))
         screen.blit(score_text, score_text_rect)
+        screen.blit(ball_text, ball_text_rect)
+        screen.blit(p1_text, p1_text_rect)
+        screen.blit(p2_text, p2_text_rect)
     else:
         # drawing victory
         screen.fill(COLOR_BLACK)
