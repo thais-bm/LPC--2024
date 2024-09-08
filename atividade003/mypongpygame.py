@@ -1,6 +1,7 @@
 # Jucimar Jr
 # Thais Carolina - 2415310037
 # 2024
+import math
 
 import pygame
 import random
@@ -58,6 +59,7 @@ ball_x = 640
 ball_y = 360
 ball_dx = 5
 ball_dy = 5
+ball_speed = math.sqrt(ball_dx**2 + ball_dy**2)
 MAX_ANGLE = 45
 
 # score
@@ -101,10 +103,16 @@ while game_loop:
             bounce_sound_effect.play()
 
         # ball collision with the player 1 's paddle
-        if PLAYER_1_X <= ball_x <= PLAYER_1_X + 50: # Intervalo eixo x
-            if player_1_y <= ball_y <= player_1_y+150: # Intervalo eixo Y
+        if PLAYER_1_X <= ball_x <= PLAYER_1_X + 50: # X
+            if player_1_y <= ball_y <= player_1_y+150: # Y
                 if ball_dx < 0:
-                    ball_dx *= -0.5 # Velocidade horizontal
+                    # Its the difference between the ball_y pos and the middle of the paddle-y pos
+                    # Normalized: -1 to +1
+                    # Max angle: 45 degrees or pi/4
+                    pos_center_ball_y = (ball_y - (player_1_y+150)/2) / 75
+                    collide_angle = pos_center_ball_y * math.pi/4
+
+                    ball_dx *= -1
                     bounce_sound_effect.play()
 
         # ball collision with the player 2 's paddle
@@ -174,9 +182,15 @@ while game_loop:
 
         # debug info
         victory_font_2 = pygame.font.Font('assets/PressStart2P.ttf', 20)
+
+        ball2_text = victory_font_2.render(f'Ball X vel: {ball_dx:.2f} -- Ball Y vel: {ball_dy} --- Ball speed: {ball_speed}', True, COLOR_YELLOW, COLOR_BLACK)
+        ball2_text_rect = ball2_text.get_rect()
+        ball2_text_rect.topleft = (20, 600)
+
         ball_text = victory_font_2.render(f'Ball X: {ball_x:.2f} -- Ball Y: {ball_y}', True, COLOR_YELLOW, COLOR_BLACK)
         ball_text_rect = ball_text.get_rect()
         ball_text_rect.topleft = (20, 630)
+
         p1_text = victory_font_2.render(f'Player 1 X: {PLAYER_1_X} -- P1 y: {player_1_y}', True, COLOR_YELLOW,
                                         COLOR_BLACK)
         p1_text_rect = p1_text.get_rect()
@@ -188,6 +202,7 @@ while game_loop:
 
         # drawing objects
         screen.blit(ball, (ball_x, ball_y))
+        screen.blit(ball2_text, ball2_text_rect)
         screen.blit(player_1, (PLAYER_1_X, player_1_y))
         screen.blit(player_2, (PLAYER_2_X, player_2_y))
         screen.blit(score_text, score_text_rect)
