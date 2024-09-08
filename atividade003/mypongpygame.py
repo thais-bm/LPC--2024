@@ -43,7 +43,7 @@ player_1_move_up = False
 player_1_move_down = False
 
 # player 2 - robot
-player_2 = pygame.image.load("assets/player.png")
+player_2 = pygame.image.load("assets/player2.png")
 player_2_y = INITIAL_Y_POSITION
 PLAYER_2_X = 1180
 
