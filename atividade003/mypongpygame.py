@@ -4,6 +4,7 @@
 
 import pygame
 import random
+from math import sin, cos, radians
 
 pygame.init()
 
@@ -57,6 +58,7 @@ ball_x = 640
 ball_y = 360
 ball_dx = 5
 ball_dy = 5
+MAX_ANGLE = 45
 
 # score
 score_1 = 0
@@ -99,15 +101,15 @@ while game_loop:
             bounce_sound_effect.play()
 
         # ball collision with the player 1 's paddle
-        if PLAYER_1_X <= ball_x <= PLAYER_1_X + 50:
-            if player_1_y <= ball_y <= player_1_y+150:
+        if PLAYER_1_X <= ball_x <= PLAYER_1_X + 50: # Intervalo eixo x
+            if player_1_y <= ball_y <= player_1_y+150: # Intervalo eixo Y
                 if ball_dx < 0:
-                    ball_dx *= -1
+                    ball_dx *= -0.5 # Velocidade horizontal
                     bounce_sound_effect.play()
 
         # ball collision with the player 2 's paddle
-        if PLAYER_2_X <= ball_x <= PLAYER_2_X+50:
-            if player_2_y <= ball_y <= player_1_y+150:
+        if PLAYER_2_X <= ball_x <= PLAYER_2_X + 50:
+            if player_2_y <= ball_y <= player_2_y+150:
                 if ball_dx > 0:
                     ball_dx *= -1
                     bounce_sound_effect.play()
@@ -155,10 +157,12 @@ while game_loop:
             player_1_y = 570
 
         # player 2 "Artificial Intelligence"
-        if ball_y > player_2_y+random.randint(25,30):
+        """if ball_y > player_2_y+random.randint(25,30):
             player_2_y += 5
         if ball_y < player_2_y-random.randint(25,30):
-            player_2_y -= 5
+            player_2_y -= 5"""
+
+        player_2_y = ball_y
 
         if player_2_y <= 0:
             player_2_y = 0
@@ -169,18 +173,18 @@ while game_loop:
         score_text = score_font.render(str(score_1) + ' x ' + str(score_2), True, COLOR_WHITE, COLOR_BLACK)
 
         # debug info
-        victory_font_2 = pygame.font.Font('assets/PressStart2P.ttf', 10)
+        victory_font_2 = pygame.font.Font('assets/PressStart2P.ttf', 20)
         ball_text = victory_font_2.render(f'Ball X: {ball_x:.2f} -- Ball Y: {ball_y}', True, COLOR_YELLOW, COLOR_BLACK)
         ball_text_rect = ball_text.get_rect()
-        ball_text_rect.topleft = (20, 620)
-        p1_text = victory_font_2.render(f'Player 1 X: {PLAYER_1_X} -- Player 1: {player_1_y}', True, COLOR_YELLOW,
+        ball_text_rect.topleft = (20, 630)
+        p1_text = victory_font_2.render(f'Player 1 X: {PLAYER_1_X} -- P1 y: {player_1_y}', True, COLOR_YELLOW,
                                         COLOR_BLACK)
         p1_text_rect = p1_text.get_rect()
-        p1_text_rect.topleft = (20, 630)
-        p2_text = victory_font_2.render(f'Player 2 X: {PLAYER_2_X} -- Player 2: {player_2_y}', True, COLOR_YELLOW,
+        p1_text_rect.topleft = (20, 650)
+        p2_text = victory_font_2.render(f'Player 2 X: {PLAYER_2_X} -- P2 y: {player_2_y}', True, COLOR_YELLOW,
                                         COLOR_BLACK)
         p2_text_rect = p2_text.get_rect()
-        p1_text_rect.topleft = (20, 640)
+        p2_text_rect.topleft = (20, 670)
 
         # drawing objects
         screen.blit(ball, (ball_x, ball_y))
